@@ -1,0 +1,207 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script:wght@600&family=Poppins:wght@500;600&display=swap');
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+    margin: 0;
+    min-height: 100svh;
+    background: linear-gradient(160deg, #D90429, #FF8FA3);
+    font-family: 'Poppins', system-ui, sans-serif;
+    overflow-x: hidden;
+    touch-action: manipulation;
+}
+
+.contain {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    padding: 22px 16px;
+}
+
+/* ---------- Carte ---------- */
+.card1 {
+    width: 100%;
+    max-width: 400px;
+    background: rgba(255, 255, 255, .96);
+    border: none;
+    border-radius: 28px;
+    padding: 24px 18px 8px;
+    box-shadow: 0 24px 50px rgba(90, 10, 26, .35);
+    order: 1;
+    will-change: transform;
+}
+
+.card1 h1 {
+    margin: 12px 0 8px;
+    font-family: "Great Vibes", cursive;
+    font-weight: 400;
+    font-size: clamp(2.2rem, 10vw, 3rem);
+    color: #D90429;
+}
+.card1 h1 span { display: inline-block; }
+
+.pict { position: relative; width: 100%; margin: 0 auto; top: 0; }
+
+.pict img {
+    width: 100%;
+    height: clamp(190px, 32svh, 300px);
+    display: block;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+.pict .bow {
+    position: absolute;
+    top: -30px;
+    right: -12px;
+    font-size: 3.6em;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .35));
+    z-index: 2;
+    transform-origin: top center;
+    animation: bow-swing 2.5s ease-in-out infinite;
+}
+
+@keyframes bow-swing {
+    0%, 100% { transform: rotate(15deg) translateY(0); }
+    50%      { transform: rotate(-10deg) translateY(-6px); }
+}
+
+/* ---------- Clavier (verre dépoli) ---------- */
+.nombre {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px 16px 22px;
+    color: #fff;
+    background: rgba(255, 255, 255, .14);
+    border: 1px solid rgba(255, 255, 255, .4);
+    border-radius: 28px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    order: 2;
+}
+
+.nombre h2 {
+    margin: 0 0 14px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.5rem;
+}
+
+.in {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 0 auto;
+}
+
+.in input {
+    width: 42px;
+    height: 46px;
+    padding: 0;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .15);
+    border: 2px solid rgba(255, 255, 255, .7);
+    text-align: center;
+    font-size: 1.3rem;
+    outline: none;
+}
+.in input::placeholder { color: rgba(255, 255, 255, .7); }
+.in input:focus { border-color: #fff; box-shadow: 0 0 14px rgba(255, 255, 255, .6); }
+
+.code-input { caret-color: #fff; color: #fff; font-weight: bold; }
+
+.message {
+    min-height: 34px;
+    margin: 12px 0 0;
+    font-weight: 600;
+    font-size: .9rem;
+    opacity: 0;
+    transition: opacity .3s ease;
+}
+.message.show { opacity: 1; }
+.message.success { color: #c9ffe0; }
+.message.error {
+    color: #fff;
+    background: rgba(0, 0, 0, .28);
+    border-radius: 8px;
+    padding: 4px 12px;
+    display: inline-block;
+}
+
+.num {
+    width: 88%;
+    max-width: 300px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+    gap: 12px;
+    margin: 6px auto 0;
+    top: 0;
+    padding: 0;
+}
+
+.nb {
+    position: relative;
+    overflow: hidden;
+    width: clamp(56px, 17vw, 70px);
+    height: auto;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, .2);
+    border: 1.5px solid rgba(255, 255, 255, .55);
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+.nb.special { background: rgba(0, 0, 0, .18); }
+
+.nb p {
+    margin: 0;
+    color: #fff;
+    font: 600 1.5rem 'Poppins', sans-serif;
+    pointer-events: none;
+}
+
+.rip {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .65);
+    pointer-events: none;
+}
+
+@media (hover: hover) { .nb:hover { background: rgba(255, 255, 255, .35); } }
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none !important; margin: 0; }
+input[type="number"] { -moz-appearance: textfield !important; }
+
+/* ---------- Effets créés par le JS ---------- */
+.fx-heart { position: fixed; bottom: -40px; z-index: 0; opacity: .45; pointer-events: none; color: #fff; }
+.fx-conf  { position: fixed; left: 50%; top: 50%; width: 10px; height: 14px; border-radius: 2px; z-index: 9; pointer-events: none; }
+.fx-pop   { position: fixed; z-index: 9; pointer-events: none; color: #fff; font-size: 14px; margin: -7px 0 0 -7px; }
+
+/* ---------- Petit mobile ---------- */
+@media (max-width: 380px) {
+    .in input { width: 36px; height: 40px; }
+    .nombre h2 { font-size: 1.25rem; }
+    .num { gap: 8px; }
+}
+
+/* ---------- Desktop ---------- */
+@media (min-width: 900px) {
+    .contain { flex-direction: row; justify-content: center; gap: 48px; }
+    .card1, .nombre { width: 40%; }
+    .pict img { height: 400px; }
+}

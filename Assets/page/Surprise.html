@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tes Surprises</title>
+<script>
+    /* Protection légère : la page n’est accessible qu’après avoir saisi le bon code sur index.html.
+       Mets PROTEGER = false pour ouvrir cette page directement (tests). */
+    const PROTEGER = true;
+    try { if (PROTEGER && sessionStorage.getItem('maria_ok') !== '1') location.replace('../../index.html'); } catch (e) {}
+</script>
+<link rel="shortcut icon" href="../Images/m1.jpg" type="image/x-icon">
+<link rel="stylesheet" href="../css/surprise.css?v=3">
+<link rel="stylesheet" href="../css/common.css?v=3">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script:wght@600&family=Poppins:wght@300;400;600&display=swap">
+</head>
+<body>
+    <audio id="birthday-audio" autoplay loop preload="auto" playsinline>
+        <source src="../Music/Lewis_Capaldi_-_Someone_You_Loved(256k).mp3" type="audio/mpeg">
+        Votre navigateur ne supporte pas l'audio.
+    </audio>
+
+<div class="stage">
+
+    <!-- ECRAN 1 : les 3 coeurs mystere -->
+    <section id="screen-hearts">
+        <h1 class="title">Joyeux Anniversaire 🎉</h1>
+        <p class="subtitle">Tape sur les cœurs mystères... j'ai des choses douces à te dire 🤍</p>
+
+        <div class="hearts-row">
+            <button class="heart-box" data-target="letter" id="heart-1">
+                <span class="heart-emoji">❤️<span class="bow">🎀</span></span>
+                <span class="heart-label">Cadeau 1</span>
+            </button>
+
+            <button class="heart-box" data-target="gallery" id="heart-2">
+                <span class="heart-emoji">❤️<span class="bow">🎀</span></span>
+                <span class="heart-label">Cadeau 2</span>
+            </button>
+
+            <button class="heart-box" data-target="announcement" id="heart-3">
+                <span class="heart-emoji">❤️<span class="bow">🎀</span></span>
+                <span class="heart-label">Cadeau 3</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- ECRAN 2A : enveloppe -->
+    <section id="screen-envelope" class="hidden">
+        <h1 class="title">Un mot pour toi</h1>
+        <div class="envelope-wrap">
+            <div class="envelope" id="envelope">
+                <div class="letter-peek" id="letter-peek"></div>
+                <div class="seal">♥</div>
+                <div class="envelope-flap"></div>
+            </div>
+            <p class="hint-text" id="envelope-hint">Ouvre-la doucement, elle contient un secret</p>
+        </div>
+    </section>
+
+    <!-- ECRAN 2B : lettre complete -->
+    <section id="screen-letter" class="hidden">
+        <div class="letter-card">
+            <span class="deco-heart left">❤️</span>
+            <span class="deco-heart right">❤️</span>
+            <h2>Ma belle Yvana</h2>
+            <p>
+                Depuis que tu es dans ma vie, même les journées les plus ordinaires ont
+                un éclat particulier. Ton sourire a ce don de tout désarmer, et ta présence,
+                même à distance, me fait du bien d'une façon que je n'explique pas toujours.<br><br>
+
+                Tu es de ces personnes rares qui mélangent la douceur et la force avec
+                une grâce qui n'appartient qu'à toi. Je t'admire plus que tu ne l'imagines,
+                et j'espère que ça se voit un peu, aujourd'hui.<br><br>
+
+                Alors en ce jour qui est le tien, je te souhaite tout ce que tu mérites
+                et un peu plus encore. Et si tu me laisses une petite place,
+                j'aimerais beaucoup en faire partie. 🤍
+            </p>
+        </div>
+        <button class="back-btn" data-back="hearts">← Retour</button>
+    </section>
+
+    <!-- ECRAN 3 : galerie souvenirs -->
+    <section id="screen-gallery" class="hidden">
+        <h1 class="title">La splendeur d'une dame s'élève par son sourire</h1>
+        <!-- <p class="subtitle">[Remplace chaque case par une vraie photo de nous / d'elle]</p> -->
+
+        <div class="gallery">
+            <div class="polaroid">
+                <div class="photo-placeholder"><img src="../Images/m2.jpg" alt=""></div>
+                Ce sourire qui me fait fondre
+            </div>
+            <div class="polaroid">
+                <div class="photo-placeholder"><video src="../Videos/v1-fix.mp4" poster="../Images/p-v1.jpg" autoplay muted playsinline loop preload="metadata"></video></div>
+                Un moment que je garde précieusement
+            </div>
+            <div class="polaroid">
+                <div class="photo-placeholder"><img src="../Images/m4.jpg" alt=""></div>
+                Une femme exceptionnelle
+            </div>
+            <div class="polaroid">
+                <div class="photo-placeholder"><video src="../Videos/v2.mp4" poster="../Images/p-v2.jpg" autoplay muted playsinline loop preload="metadata"></video></div>
+                Un souvenir inoubliable
+            </div>
+            <div class="polaroid">
+                <div class="photo-placeholder"><img src="../Images/m1.jpg" alt=""></div>
+                Toi, mon inspiration
+            </div>
+        </div>
+
+        <button class="back-btn" data-back="hearts">← Retour</button>
+    </section>
+
+    <!-- ECRAN 4 : annonce speciale -->
+    <section id="screen-announcement" class="hidden">
+        <div class="announcement">
+            <img class="announcement-image" src="../Images/m4.jpg" alt="Image de l'annonce">
+            <div class="announcement-overlay">
+                <p class="subtitle">Une dernière chose, Yvana... si tu veux bien .. ..., direction</p>
+                <div class="plane-line">✈️ ✈️ ✈️</div>
+                <div class="destination">Mont Himalya</div>
+                <div class="answer-row">
+                    <button type="button" class="yes-btn" id="yes-btn">Oui 💕</button>
+                    <button type="button" class="no-btn" id="no-btn">Non</button>
+                </div>
+            </div>
+        </div>
+        <button class="back-btn" data-back="hearts">← Retour</button>
+    </section>
+
+</div>
+
+<!-- <p class="edit-note">Toutes les zones entre [ ] sont des placeholders à remplacer dans le code.</p> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="audio-continu.js"></script>
+<script>
+    const audio = document.getElementById('birthday-audio');
+
+    function launchAudio() {
+        if (!audio) return;
+        audio.volume = 0.6;
+        audio.play().catch(() => {});
+    }
+    window.addEventListener('load', launchAudio);
+    document.addEventListener('click', launchAudio, { passive: true });
+    document.addEventListener('touchstart', launchAudio, { passive: true });
+    document.addEventListener('keydown', launchAudio, { passive: true });
+
+    const screens = {
+        hearts: document.getElementById('screen-hearts'),
+        envelope: document.getElementById('screen-envelope'),
+        letter: document.getElementById('screen-letter'),
+        gallery: document.getElementById('screen-gallery'),
+        announcement: document.getElementById('screen-announcement')
+    };
+
+    function showScreen(name) {
+        Object.values(screens).forEach(s => s.classList.add('hidden'));
+        screens[name].classList.remove('hidden');
+        if (typeof gsap !== 'undefined') {
+            gsap.fromTo(screens[name], { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' });
+        }
+    }
+
+    document.querySelectorAll('.heart-box').forEach(btn => {
+        btn.addEventListener('click', () => {
+            btn.classList.add('opened');
+            const target = btn.dataset.target;
+            if (target === 'letter') showScreen('envelope');
+            else showScreen(target);
+        });
+    });
+
+    const envelope = document.getElementById('envelope');
+    const envelopeHint = document.getElementById('envelope-hint');
+    const letterPeek = document.getElementById('letter-peek');
+
+    envelope.addEventListener('click', () => {
+        if (!envelope.classList.contains('open')) {
+            envelope.classList.add('open');
+            envelopeHint.textContent = "Vas-y, lis-la... elle t'attend";
+        } else {
+            showScreen('letter');
+        }
+    });
+
+    letterPeek.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (envelope.classList.contains('open')) showScreen('letter');
+    });
+
+    document.querySelectorAll('.back-btn').forEach(btn => {
+        btn.addEventListener('click', () => showScreen(btn.dataset.back));
+    });
+</script>
+<script src="../js/common.js?v=3"></script>
+<script src="../js/surprise-animations.js?v=3"></script>
+
+
+</body>
+</html>

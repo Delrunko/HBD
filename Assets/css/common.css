@@ -1,0 +1,16 @@
+/* Bouton son + écran de démarrage (partagés par index.html et Surprise.html) */
+#sound-btn {
+    position: fixed; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); right: 10px; z-index: 40;
+    width: 40px; height: 40px; padding: 0; border-radius: 50%; display: grid; place-items: center;
+    border: 1px solid rgba(255, 255, 255, .6); background: rgba(255, 255, 255, .2); color: #fff; font-size: 1.1rem;
+    cursor: pointer; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+#start-screen {
+    position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; text-align: center; color: #fff;
+    background: linear-gradient(160deg, #D90429, #FF8FA3); cursor: pointer; touch-action: manipulation;
+    font-family: 'Poppins', sans-serif; user-select: none; -webkit-user-select: none;
+}
+.st-gift { font-size: 5.5rem; line-height: 1; filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .3)); display: inline-block; }
+.st-title { font-family: 'Great Vibes', cursive; font-size: clamp(2.4rem, 11vw, 3.4rem); margin: 10px 0 2px; text-shadow: 0 3px 12px rgba(0, 0, 0, .25); }
+.st-sub { margin: 0; opacity: .95; animation: st-blink 1.6s ease-in-out infinite; }
+@keyframes st-blink { 50% { opacity: .35; } }

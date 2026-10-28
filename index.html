@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joyeux Anniversaire</title>
+    <link rel="stylesheet" href="Assets/css/style.css?v=3">
+    <link rel="stylesheet" href="Assets/css/common.css?v=3">
+    <link rel="shortcut icon" href="Assets/Images/m1.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script&family=Poppins:wght@300&display=swap">
+</head>
+<body data-start>
+    <audio id="birthday-audio" autoplay loop preload="auto" playsinline>
+        <source src="Assets/Music/Lewis_Capaldi_-_Someone_You_Loved(256k).mp3" type="audio/mpeg">
+        Votre navigateur ne supporte pas l'audio.
+    </audio>
+
+    <div class="contain">
+        <div class="card1">
+            <div class="pict">
+                <img src="Assets/Images/m2.jpg" alt="Photo souvenir">
+                <span class="bow">🎀</span>
+            </div>
+            <div class="txt">
+                <center>
+                <h1>Happy Birthday</h1>
+                </center>
+            </div>
+        </div>
+        <div class="nombre">
+            <center>
+                <h2 style="color: #fff;">Entre ton année de naissance</h2>
+            <div class="in">
+                <input type="text" class="code-input" maxlength="1" placeholder="*" inputmode="numeric" pattern="[0-9]*">
+                <input type="text" class="code-input" maxlength="1" placeholder="*" inputmode="numeric" pattern="[0-9]*">
+                <input type="text" class="code-input" maxlength="1" placeholder="*" inputmode="numeric" pattern="[0-9]*">
+                <input type="text" class="code-input" maxlength="1" placeholder="*" inputmode="numeric" pattern="[0-9]*">
+            </div>
+
+            <p id="message" class="message"></p>
+
+            <div class="num">
+
+                <div class="nb"><p>1</p></div>
+                <div class="nb"><p>2</p></div>
+                <div class="nb"><p>3</p></div>
+                <div class="nb"><p>4</p></div>
+                <div class="nb"><p>5</p></div>
+                <div class="nb"><p>6</p></div>
+                <div class="nb"><p>7</p></div>
+                <div class="nb"><p>8</p></div>
+                <div class="nb"><p>9</p></div>
+                <div class="nb"><p>*</p></div>
+                <div class="nb"><p>0</p></div>
+                <div class="nb"><p>#</p></div>
+
+            </div>
+
+            <!-- <button type="button" class="delete-btn" id="delete-btn">⌫ Supprimer</button> -->
+
+            </center>
+        </div>
+    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="Assets/page/audio-continu.js"></script>
+<script src="Assets/js/animations.js?v=3"></script>
+<script src="Assets/js/common.js?v=3"></script>
+    <script>
+        const audio = document.getElementById('birthday-audio');
+        audio.volume = 0.6;
+
+        // 1) On tente une lecture AVEC le son dès le chargement de la page.
+        //    Si le navigateur refuse (politique anti-autoplay), on bascule
+        //    automatiquement en muet pour que la lecture démarre quand même,
+        //    puis on réactive le son dès la toute première interaction
+        //    (clic, toucher, scroll, touche clavier) sans que l'utilisateur
+        //    ait besoin de chercher un bouton "lecture".
+        function tenterLectureAvecSon() {
+            audio.muted = false;
+            const p = audio.play();
+            if (p && typeof p.catch === 'function') {
+                p.catch(() => {
+                    // Lecture avec son refusée : on démarre en muet.
+                    demarrerEnMuet();
+                });
+            }
+        }
+
+        function demarrerEnMuet() {
+            audio.muted = true;
+            audio.play().catch(() => {
+                // Même en muet ça peut échouer sur certains navigateurs stricts,
+                // dans ce cas la première interaction ci-dessous s'en chargera.
+            });
+        }
+
+        function activerSonAuPremierGeste() {
+            audio.muted = false;
+            if (audio.paused) {
+                audio.play().catch(() => {});
+            }
+            retirerEcouteurs();
+        }
+
+        function retirerEcouteurs() {
+            document.removeEventListener('click', activerSonAuPremierGeste);
+            document.removeEventListener('touchstart', activerSonAuPremierGeste);
+            document.removeEventListener('scroll', activerSonAuPremierGeste);
+            document.removeEventListener('keydown', activerSonAuPremierGeste);
+        }
+
+        window.addEventListener('load', tenterLectureAvecSon);
+        document.addEventListener('click', activerSonAuPremierGeste, { passive: true });
+        document.addEventListener('touchstart', activerSonAuPremierGeste, { passive: true });
+        document.addEventListener('scroll', activerSonAuPremierGeste, { passive: true });
+        document.addEventListener('keydown', activerSonAuPremierGeste, { passive: true });
+
+        // ---- Configuration ----
+        const CODE_ATTENDU = "2002";      // le code qui débloque la redirection
+        const PAGE_DESTINATION = "Assets/page/Surprise.html"; // page vers laquelle on redirige
+        const DELAI_REDIRECTION = 3200;   // ms avant redirection si succès
+        const DELAI_RESET = 1800;         // ms avant de réinitialiser si échec
+
+        const inputs = Array.from(document.querySelectorAll('.code-input'));
+        const messageEl = document.getElementById('message');
+        let currentIndex = 0;
+        let locked = false; // empêche de rejouer pendant l'animation de résultat
+
+        function afficherMessage(texte, succes) {
+            messageEl.textContent = texte;
+            messageEl.classList.remove('success', 'error');
+            messageEl.classList.add(succes ? 'success' : 'error', 'show');
+        }
+
+        function effacerMessage() {
+            messageEl.textContent = '';
+            messageEl.classList.remove('success', 'error', 'show');
+        }
+
+        function reinitialiser() {
+            inputs.forEach(inp => inp.value = '');
+            currentIndex = 0;
+            locked = false;
+            inputs[0].focus();
+        }
+
+        function supprimerDernier() {
+            if (locked) return;
+            for (let i = inputs.length - 1; i >= 0; i--) {
+                if (inputs[i].value !== '') {
+                    inputs[i].value = '';
+                    currentIndex = i;
+                    inputs[i].focus();
+                    effacerMessage();
+                    break;
+                }
+            }
+        }
+
+        function verifierCode() {
+            if (locked) return;
+            const code = inputs.map(inp => inp.value).join('');
+
+            if (code.length < 4) {
+                afficherMessage('Entre les 4 chiffres de ton année de naissance.', false);
+                return;
+            }
+
+            locked = true;
+
+            if (code === CODE_ATTENDU) {
+                afficherMessage('Bonne réponse ! Redirection en cours...', true);
+                setTimeout(() => {
+                    try { sessionStorage.setItem('maria_ok', '1'); } catch (e) {}
+                    window.location.href = PAGE_DESTINATION;
+                }, DELAI_REDIRECTION);
+            } else {
+                afficherMessage("Ce n'est pas la bonne année. Réessaie !", false);
+                setTimeout(reinitialiser, DELAI_RESET);
+                setTimeout(effacerMessage, DELAI_RESET + 400);
+            }
+        }
+
+        // Saisie via le clavier numérique à l'écran
+        document.querySelectorAll('.nb').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (locked) return;
+                const val = btn.querySelector('p').textContent.trim();
+
+                if (val === '*') {
+                    reinitialiser();
+                    effacerMessage();
+                    return;
+                }
+
+                if (val === '#') {
+                    verifierCode();
+                    return;
+                }
+
+                if (currentIndex < inputs.length) {
+                    inputs[currentIndex].value = val;
+                    currentIndex++;
+                    if (currentIndex === inputs.length) {
+                        verifierCode();
+                    } else {
+                        inputs[currentIndex].focus();
+                    }
+                }
+            });
+        });
+
+        // Bouton de suppression (efface le dernier chiffre saisi) - optionnel, activé seulement s'il existe dans le HTML
+        const deleteBtn = document.getElementById('delete-btn');
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', supprimerDernier);
+        }
+
+        // Saisie via le clavier physique directement dans les cases
+        inputs.forEach((inp, idx) => {
+            inp.addEventListener('input', () => {
+                inp.value = inp.value.replace(/[^0-9]/g, '').slice(0, 1);
+                if (inp.value !== '') {
+                    currentIndex = idx + 1;
+                    if (idx < inputs.length - 1) {
+                        inputs[idx + 1].focus();
+                    } else {
+                        verifierCode();
+                    }
+                }
+            });
+
+            inp.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && inp.value === '' && idx > 0) {
+                    inputs[idx - 1].focus();
+                    currentIndex = idx;
+                }
+                if (e.key === 'Enter') {
+                    verifierCode();
+                }
+            });
+        });
+
+        inputs[0].focus();
+    </script>
+</body>
+</html>
